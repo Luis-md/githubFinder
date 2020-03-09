@@ -7,13 +7,20 @@ export class Search extends Component {
     }
 
     static propTypes = {
-        searchUsers: PropTypes.array.isRequired,
+        searchUsers: PropTypes.func.isRequired,
+        clearUsers: PropTypes.func.isRequired,
+        showClear: PropTypes.bool.isRequired,
+        setAlert: PropTypes.func.isRequired,
     }
 
     submitHandler = (e) => {
         e.preventDefault()
-        this.props.searchUsers(this.state.text)
-        this.setState({ text: '' })
+        if(this.state.text === '') {
+            this.props.setAlert('Please enter a username', 'light')
+        } else {
+            this.props.searchUsers(this.state.text)
+            this.setState({ text: '' })
+        }
     }
 
     inputHandler = (e) => {
@@ -26,6 +33,9 @@ export class Search extends Component {
     }
 
     render() {
+        const showBtn = this.props.showClear ? 
+        <button className='btn btn-light btn-block' onClick={this.props.clearUsers}>Clear</button> : null
+
         return (
             <div>
                 <form onSubmit={this.submitHandler} className='form'>
@@ -41,6 +51,7 @@ export class Search extends Component {
                     value='Search' 
                     className='btn btn-dark btn-block'/>
                 </form>
+                {showBtn}
             </div>
         )
     }
