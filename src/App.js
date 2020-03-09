@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Users from './components/users/Users'
+import User from './components/users/User'
 import Search from './components/users/Search'
 import Alert from './components/layout/Alert'
 import About from './components/pages/About'
@@ -12,18 +13,10 @@ class App extends Component {
 
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null
   }
-
-  // async componentDidMount() {
-  //     this.setState({ loading: true })
-  //     const res = await axios.get(`https://api.github.com/users?client_id${process.env.REACT_APP_GITHUB_ID}&client_secret=${
-  //       process.env.REACT_APP_GITHUB_CLIENT_SECRET
-  //     }`)
-      
-  //     this.setState({ users: res.data, loading: false })
-  //   }
 
     searchUsersHandler = async (text) => {
       this.setState({ loading: true })
@@ -33,6 +26,17 @@ class App extends Component {
       }`)
       
       this.setState({ users: res.data.items, loading: false })
+    }
+
+    getUserHandler = async (username) => {
+        this.setState({ loading: true })
+        const res = await axios.get(`https://api.github.com/users/${username}?client_id${process.env.REACT_APP_GITHUB_ID}&client_secret=${
+          process.env.REACT_APP_GITHUB_CLIENT_SECRET
+        }`)
+        this.setState({
+          user: res.data,
+          loading: false
+         })
     }
 
     clearUsersHandler = () => {
@@ -51,7 +55,7 @@ class App extends Component {
     }
 
   render () {
-    const { users, loading } = this.state
+    const { users, user, loading } = this.state
     return (
       <Router>
     <div className="App">
@@ -70,6 +74,9 @@ class App extends Component {
             </Fragment>
           )} />
           <Route exact path='/about' component={About} />
+          <Route exact path='/user/:login' render={ props => (
+            <User {...props} getUser={this.getUserHandler} user={user} loading={loading} />
+          )}/>
         </Switch>
       </div>
      </div>
