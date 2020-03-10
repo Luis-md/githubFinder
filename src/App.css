@@ -30,6 +30,7 @@ a {
 
 a:hover {
   color: #666;
+  border-bottom: 2px solid #fff;
 }
 
 ul {
@@ -112,8 +113,14 @@ img {
 /* Cards */
 .card {
   padding: 1rem;
-  border: #ccc 1px dotted;
+  border: #ccc 1px solid;
   margin: 0.7rem 0;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 /* List */
