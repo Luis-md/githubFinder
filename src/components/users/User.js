@@ -1,20 +1,25 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useContext } from 'react'
 import Spinner from  '../layout/Spinner'
 import Repos from '../repos/Repos'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import GithubContext from '../../context/github/githubContext'
 
-const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
+const User = ({ match }) => {
+    
+    const githubContext = useContext(GithubContext)
+
+    const {  user, loading, getUser, repos, getUserReposHandler } = githubContext
+
     useEffect(() => {
         getUser(match.params.login)
-        getUserRepos(match.params.login)
+        getUserReposHandler(match.params.login)
         //eslint-disable-next-line
     }, [])
     //we use the second param on useEffect to make the method listen to updates
     //the eslint comment is just making possible to use the empty array 
     //and so it will update just once - just like componentDidMount 
-    const { 
-        name,
+    
+    const {
         avatar_url,
         location,
         bio,
@@ -85,12 +90,6 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
             </Fragment>
 }
 
-User.propTypes = {
-    loading: PropTypes.bool,
-    user: PropTypes.object.isRequired,
-    repos: PropTypes.array.isRequired,
-    getUser: PropTypes.func.isRequired,
-    getUserRepos: PropTypes.func.isRequired,
-}
+
 
 export default User
